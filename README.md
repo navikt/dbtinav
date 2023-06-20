@@ -1,73 +1,45 @@
-## Formål
-Overordnet beskrivelse av formål med løsningen
+## Nytt dbt prosjekt
 
-### Komponentbeskrivelse
-Formål: 
-Prinsipper:
-Kilde(r):
-Brukere:
-Noe annet:
+### Utvikling
+Lag gjerne et virtuelt python enviroment inne i dbt mappa. (Pass på å legge den til .gitignore)
 
-## Struktur på repo
-Lenke til dokumentasjon på confluence
+```python -m venv .dbtenv```
 
-Vi har følgende mapper:
-- db (medfølgende readme)
-  - install (her ligger ddl filer per tabell/view. Også dcl-filer som gir grants)
-  - patch (hvert script har jira-kode som prefiks og kort forklaring/tabellnavn). Når man endrer en tabell her må man også endre den i install-filen)
-  - utils (kanskje, hvis man trenger det)
-- etl - om det finnes kodebasert etl for komponenten, legger man det inn under mappen etl. Der er det en mappe per task/mapping. Bør også inneholde readmes.
+Aktiver (i Powershell):
+
+``.\.dbtenv\Scripts\activate.ps1``
+
+Installer pakker for utvikling med pip.
+(Ta en titt i requirements.txt for pakker og versjoner)
+
+``pip install -r requirements.txt``
 
 
 
-
-## Overordnet design
-### Dataflyt-diagram
-
-![Dataflyt](dataflyt-generisk.drawio.png)
-Hvis man lagrer diagrammet som .drawio.png blir det redigerbart i [drawio](https://github.com/jgraph/drawio-desktop/releases/tag/v20.3.0)
-
-| # | DAG | task | kilde | mål | kommentar |
-|---|-----|------|-------|-----|-----------|
-|   |     |      |       |     |           |
-|   |     |      |       |     |           |
-|   |     |      |       |     |           |
-
-## Databasebeskrivelse
-
-En oversikt over de viktigste tabellene
-
-| Tabell/Views      | Beskrivelse |
-| ----------- | ----------- |
-| tabell1      | besk       |
-| tabell2    | besk        |
-
-### Databasescript
-Referanser til hvor databasescriptene befinner seg
-
-## Drift
-### Workflows og kjøretidspunkt
-Inneholder informasjon om viktige punkter for kjøretider
-
-## Tilgangsstyring
-Er det noen spesielle rettigheter som kreves for denne komponenten?
-
-## Overvåking og datakvalitet
-
-### Datakvalitet
-Det kjøres datakvalitetsmålinger for disse tabellene
-
-### Overvåking
-Følgende Sitescope-monitorer kjøres for denne komponenten.
-
-## Sikkerhet og personvern
-Inneholder detaljer rundt f.eks tilgang
-
-Det er ikke utarbeidet PVK for denne komponenten.
-
-Håndtering av kode 6 og 7: Under arbeid
-
-## Backlog
-Lenke til jira-oversikt?
+### Oppsett
+- Gi navn til prosjektet i dbt_project.yml
+- Opprett en profil i profiles.yml og referer til profilen i dbt_project.yml
 
 
+For å kjøre dbt prosjektet fra utviklerimage må dbt ha tilgang til secrets for:
+- miljø
+- komponentskjema
+- personlig brukernavn
+- personlig passord
+
+Disse secretene settes opp med skriptet `setup_db_user.ps1`, som setter dem som miljøvariabler. Skriptet kjøres fra kommandolinjen og den må kjøres fra dbt folderen fordi skritet også setter pathen for profiles.yml filen.
+
+Eksempel på kjøring:
+
+ ```PS C:\datavarehus\dvh_arb_cv\dbt> ./setup_db_user.ps1```
+
+### Schedulering
+
+dbt_run.py er et skript for schedulere dbt prosjektet i Airflow. Denne filen må endres til å passe sammen med secrets håndteringen til teamet.
+
+### Resources:
+- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
+- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
+- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
+- Find [dbt events](https://events.getdbt.com) near you
+- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
