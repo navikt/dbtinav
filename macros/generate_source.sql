@@ -1,5 +1,5 @@
 ---
-{% macro generate_source_nav(schema_name, database_name=target.database, generate_columns=False, include_descriptions=False, table_pattern='%', exclude='', name=schema_name, table_names=None) %}
+{% macro generate_source_yaml(schema_name, database_name=target.database, generate_columns=False, include_descriptions=False, table_pattern='%', exclude='', name=schema_name, table_names=None) %}
 
 {% set sources_yaml=[] %}
 {% do sources_yaml.append('version: 2') %}
@@ -31,7 +31,7 @@
     {% do sources_yaml.append('      - name: ' ~ table | lower ) %}
     {% if include_descriptions %}
         {% set description = dbt_utils.get_single_value(
-            get_table_comment_sql(schema_name, table), default=none
+            dbtinav.get_table_comment_sql(schema_name, table), default=none
         ) %}
         {% if description is none %}
             {% set description='Description missing.' %}
@@ -54,7 +54,7 @@
         {% set columns=adapter.get_columns_in_relation(table_relation) %}
 
         {% set comment_columns = dbt_utils.get_query_results_as_dict(
-            get_all_column_comments_sql(schema_name, table)
+            dbtinav.get_all_column_comments_sql(schema_name, table)
         ) %}
 
         {% set col_comments = dict(zip(comment_columns['COLUMN_NAME'], comment_columns['COMMENTS']))%}
