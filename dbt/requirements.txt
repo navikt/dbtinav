@@ -1,0 +1,3 @@
+dbt-oracle==1.4.2
+sqlfluff==1.4.5
+sqlfluff-templater-dbt==1.4.5

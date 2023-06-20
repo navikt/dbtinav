@@ -1,0 +1,72 @@
+{
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell",
+            "args": ["-noexit", "-file", "${workspaceFolder}/dbt/setup_dbt_env.ps1"],
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        }
+    },
+    // Setter powershell til std terminal
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    // Åpner hver terminal i riktig mappe
+    //"terminal.integrated.cwd": "dbt",
+    "files.associations": {
+        // the pattern on the left side can be whatever you want: e.g.
+        "**/dbt/**/*.sql": "jinja-sql", // just the .sqlfiles inside of dbt
+    
+        // optional: don't format models in `target/` dir
+        "**/dbt/target/**/*.sql": "plaintext",
+        // Make jinja work for `yaml` and `md` files
+        "**/dbt/**/*.yaml": "jinja-yaml",
+         "**/dbt/**/*.yml": "jinja-yaml",
+        "**/dbt/**/docs/**/*.md": "jinja-md",
+    
+        // the vscode-dbt docs say you may need this
+        "editor.quickSuggestions": {
+            "strings": "true",
+        },
+    },
+    // this is so you can easily jump to your compiled SQL files
+    "findrelated.workspaceRulesets": [
+        {
+            "name": "sql",
+            "rules": [
+                {
+                    "pattern": "^(.*/)?models/(.*/)?(.+\\.sql)$",
+                    "locators": [
+                        "**/compiled/**/$3"
+                    ]
+                },
+                {
+                    "pattern": "^(.*/)?compiled/(.*/)?(.+\\.sql)$",
+                    "locators": [
+                        "**/run/**/$3"
+                    ]
+                },
+                {
+                    "pattern": "^(.*/)?run/(.*/)?(.+\\.sql)$",
+                    "locators": [
+                        "**/models/**/$3"
+                    ]
+                }
+            ]
+        }
+    ],
+    "findrelated.applyRulesets": [
+        "sql"
+    ],
+    "editor.renderWhitespace": "all",
+    // Deactivate virtual env, we handle this in startup script
+    "python.terminal.activateEnvironment": false
+}

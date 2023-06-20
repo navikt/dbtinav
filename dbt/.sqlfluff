@@ -1,0 +1,29 @@
+[sqlfluff]
+dialect = ansi
+templater = dbt
+exclude_rules = L031
+
+[sqlfluff:rules]
+tab_space_size = 4
+max_line_length = 120
+
+[sqlfluff:rules:L010]
+# Keywords
+capitalisation_policy = upper
+
+[sqlfluff:rules:L011]
+# Table aliasing
+aliasing = implicit
+
+[sqlfluff:rules:L019]
+# Leading/Trailing comma enforcement.
+comma_style = leading
+
+[sqlfluff:templater:dbt]
+project_dir = ./
+profiles_dir = ./
+profile = <root node in profiles.yml>
+target = <target in profiles.yml>
+
+[sqlfluff:templater:jinja]
+apply_dbt_builtins = True
