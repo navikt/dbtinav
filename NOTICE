@@ -1,0 +1,10 @@
+Apache Royale
+Copyright 2020 The Apache Software Foundation
+
+This product includes software developed at
+dbt Labs (http://getdbt.com/).
+
+The Initial Developer of some parts of the package, macros/generate_source.sql, which are derived from dbt-codegen,
+is dbt Labs (http://getdbt.com/).
+
+The file is changed to allow for descriptions to be loaded into yaml format from the database. The code is adapted to work with Oracle SQL.
