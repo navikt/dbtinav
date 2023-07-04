@@ -1,45 +1,25 @@
-## Nytt dbt prosjekt
+## dbt pakke for NAV
 
-### Utvikling
-Lag gjerne et virtuelt python enviroment inne i dbt mappa. (Pass på å legge den til .gitignore)
+Dette repoet inneholder et dbt prosjekt som kan brukes som en pakke i prosjektene.
 
-```python -m venv .dbtenv```
+Pakken kan importes i prosjektet ditt gjennom filen ```packages.yml``` slik:
 
-Aktiver (i Powershell):
+    packages:
+      - package: dbt-labs/dbt_utils
+        version: 1.1.1
+      - git: "https://github.com/navikt/dbtinav.git" # git URL
+        revision: 0.0.3
 
-``.\.dbtenv\Scripts\activate.ps1``
-
-Installer pakker for utvikling med pip.
-(Ta en titt i requirements.txt for pakker og versjoner)
-
-``pip install -r requirements.txt``
+Her refererer revision til en bestemt tag i dette repoet.
 
 
+Foreløpig er det implementert en macro for å importere kildertabeller fra Oracle med tabell og kolonnebeskrivelser.
 
-### Oppsett
-- Gi navn til prosjektet i dbt_project.yml
-- Opprett en profil i profiles.yml og referer til profilen i dbt_project.yml
+Makroen heter `generate_source_yaml` og kan brukes slik i en sql fil i `analyses` mappen i prosjektet ditt:
 
+    {{ dbtinav.generate_source_yaml(schema_name = 'dt_kodeverk', generate_columns='true', include_descriptions='true', table_names = ['dim_alder', 'dim_geografi']) }}
 
-For å kjøre dbt prosjektet fra utviklerimage må dbt ha tilgang til secrets for:
-- miljø
-- komponentskjema
-- personlig brukernavn
-- personlig passord
-
-Disse secretene settes opp med skriptet `setup_db_user.ps1`, som setter dem som miljøvariabler. Skriptet kjøres fra kommandolinjen og den må kjøres fra dbt folderen fordi skritet også setter pathen for profiles.yml filen.
-
-Eksempel på kjøring:
-
- ```PS C:\datavarehus\dvh_arb_cv\dbt> ./setup_db_user.ps1```
-
-### Schedulering
-
-dbt_run.py er et skript for schedulere dbt prosjektet i Airflow. Denne filen må endres til å passe sammen med secrets håndteringen til teamet.
-
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+- ``schema_name`` er navnet på komponentskjemaet tabellen ligger
+- `generate_columns` settes til true hvis du ønkser å importere kolonner og ikke bare selve tabellen.
+- `include_descriptions` settes til true dersom du ønsker å importere kommentarer på tabell og kolonne i tillegg til navn.
+- `table_names` er en liste med tabeller du ønkser å importere.
