@@ -1,9 +1,49 @@
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
 name: 'dbtinav'
 version: '0.0.2'
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 config-version: 2
 
-target-path: "target"
-clean-targets: ["target", "dbt_packages"]
+# This setting configures which "profile" dbt uses for this project.
+profile: 'dbtinav'
+
+# Quoting
+quoting:
+  database: true
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
 macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
 log-path: "logs"
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+# Konfig for modeller
+models:
+  dvh_arb_reg: # Refererer til prosjektnavn. Under her et path til hver modell:
+    +persist_docs:
+      relation: true
+      columns: true
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    marts:
+      +materialized: table
+
+on-run-end:
+  - 'begin ssr_mtn.update_access_role_privs_in_db; end;'
