@@ -1,14 +1,25 @@
-"dbtinav":
+"fyll inn profiles-navn fra dbt_project.yml":
   target: "{{env_var('DBT_DB_TARGET')}}"
   outputs:
+    TD:
+      type: oracle
+      user: "{{env_var('DBT_USER')}}"
+      pass: "{{env_var('DBT_PASS')}}"
+      protocol: tcp
+      host: "{{env_var('DBT_DB_DSN', '10.51.9.59')}}"
+      port: 1521
+      service: dwh_td
+      database: DWH_TD
+      schema: "{{env_var('DBT_USER')}}"
+      threads: 10
     U:
       type: oracle
       user: "{{env_var('DBT_ENV_SECRET_USER')}}"
       pass: "{{env_var('DBT_ENV_SECRET_PASS')}}"
       protocol: tcp
-      host: dm07-scan.adeo.no
+      host: "{{env_var('DBT_DB_DSN', 'dmv07-scan.adeo.no')}}"
       port: 1521
-      service: dwhu1
+      service: ccdwhu1_ha
       database: dwhu1
       schema: "{{env_var('DBT_DB_SCHEMA')}}"
       threads: 10
@@ -17,10 +28,10 @@
       user: "{{env_var('DBT_ENV_SECRET_USER')}}"
       pass: "{{env_var('DBT_ENV_SECRET_PASS')}}"
       protocol: tcp
-      host: dm07-scan.adeo.no
+      host: "{{env_var('DBT_DB_DSN', 'dm07-scan.adeo.no')}}"
       port: 1521
       service: dwhr
-      database: dwhr
+      database: dwhpr
       schema: "{{env_var('DBT_DB_SCHEMA')}}"
       threads: 10
     Q:
@@ -28,9 +39,9 @@
       user: "{{env_var('DBT_ENV_SECRET_USER')}}"
       pass: "{{env_var('DBT_ENV_SECRET_PASS')}}"
       protocol: tcp
-      host: dm07-scan.adeo.no
+      host: "{{env_var('DBT_DB_DSN', 'dmv04-scan.adeo.no')}}"
       port: 1521
-      service: dwhq0
+      service: ccdwhq0_ha
       database: dwhq0
       schema: "{{env_var('DBT_DB_SCHEMA')}}"
       threads: 10
@@ -39,11 +50,9 @@
       user: "{{env_var('DBT_ENV_SECRET_USER')}}"
       pass: "{{env_var('DBT_ENV_SECRET_PASS')}}"
       protocol: tcp
-      host: dm08-scan.adeo.no
+      host: "{{env_var('DBT_DB_DSN', 'dm08-scan.adeo.no')}}"
       port: 1521
       service: dwh_ha
-      database: dwh_ha
+      database: dwhpr
       schema: "{{env_var('DBT_DB_SCHEMA')}}"
       threads: 10
-config:
-  send_anonymous_usage_stats: False
