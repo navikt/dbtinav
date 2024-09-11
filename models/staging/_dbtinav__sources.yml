@@ -1,0 +1,9 @@
+dbt version: 2
+
+sources:
+  - name: dbtinav
+    schema: dvh_arb_reg
+    description: > 
+      testdata for å utvikle pakker
+    tables:
+      - name: dummydata
